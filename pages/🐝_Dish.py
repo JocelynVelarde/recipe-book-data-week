@@ -1,4 +1,17 @@
 import streamlit as st
+from urllib.parse import quote_plus
+from pymongo import MongoClient
+
+username = quote_plus(st.secrets["mongo"]["username"])
+password = quote_plus(st.secrets["mongo"]["password"])
+cluster_url = st.secrets["mongo"]["cluster_url"]
+
+uri = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority&appName=Cluster0"
+
+client = MongoClient(uri)
+
+db = client['recipe-book']
+collection = db['recipes']
 
 # Page configuration
 st.set_page_config(page_title="Add a New Dish", page_icon="🍽️", layout="wide")

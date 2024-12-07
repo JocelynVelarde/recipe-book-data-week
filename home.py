@@ -8,7 +8,7 @@ st.title("🍴 Recipe Book Project")
 st.subheader("Discover and share amazing recipes")
 
 # Banner Image
-st.image("assets/dish1.jpg", width=200)
+st.image("assets/dish2.jpg", width=200)
 
 # Introduction
 st.markdown("### Welcome to the Recipe Book Project")

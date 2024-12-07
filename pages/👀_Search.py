@@ -1,4 +1,17 @@
 import streamlit as st
+from pymongo import MongoClient
+from urllib.parse import quote_plus
+
+username = quote_plus(st.secrets["mongo"]["username"])
+password = quote_plus(st.secrets["mongo"]["password"])
+cluster_url = st.secrets["mongo"]["cluster_url"]
+
+uri = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority&appName=Cluster0"
+
+client = MongoClient(uri)
+
+db = client['recipe-book']
+collection = db['recipes']
 
 # Page configuration
 st.set_page_config(page_title="Recipe Finder", page_icon="🍲", layout="wide")
@@ -17,18 +30,22 @@ search_query = st.text_input("Search for a recipe by name or ingredient", placeh
 
 # Search button
 if st.button("Search"):
+    query = {}
     if search_query:
+        query['$or'] = [
+            {"name": {"$regex": search_query, "$options": "i"}},
+            {"ingredients": {"$regex": search_query, "$options": "i"}}
+        ]
         st.write(f"Searching for recipes with: {search_query}")
-        
-        # Example results
-        st.markdown("### Search Results")
-        st.write("- **Enchiladas**")
-        st.write("- **Tacos**")
-        st.write("- **Chicken Curry**")
-        st.write("- **Pasta Alfredo**")
+
     else:
         st.error("Please enter a search query")
 
+    recipes = list(collection.find(query, {"_id": 0, "name": 1, "image": 1, "ingredients": 1, "instructions": 1, "cook_time": 1, "difficulty": 1}))
+    if recipes:
+        for recipe in recipes:
+            st.write(recipe['name'])
+            st.write(recipe['ingredients'])
 # Footer
 st.markdown("---")
 st.markdown("Made with ❤️ using Streamlit")

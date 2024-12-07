@@ -1,4 +1,18 @@
 import streamlit as st
+from urllib.parse import quote_plus
+from pymongo import MongoClient
+
+
+username = quote_plus(st.secrets["mongo"]["username"])
+password = quote_plus(st.secrets["mongo"]["password"])
+cluster_url = st.secrets["mongo"]["cluster_url"]
+
+uri = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority&appName=Cluster0"
+
+client = MongoClient(uri)
+
+db = client['recipe-book']
+collection = db['recipes']
 
 # Page configuration
 st.set_page_config(page_title="Recipes", page_icon="🍔", layout="wide")
@@ -7,13 +21,7 @@ st.set_page_config(page_title="Recipes", page_icon="🍔", layout="wide")
 st.title("🍔 Visualize Your Current Recipes")
 st.subheader("Explore the delicious recipes you have added")
 
-# Sample recipes data
-recipes = [
-    {"name": "Chile en Nogada", "image": "https://www.tastingtable.com/img/gallery/traditional-mexican-dishes/l-intro-1683731770.jpg"},
-    {"name": "Enfrijoladas", "image": "https://blog.amigofoods.com/wp-content/uploads/2020/12/enfrijoladas-mexican-food.jpg"},
-    {"name": "Pozole", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnlTy5mUhFTAeDonihkTM2plqukb-1iLekwQ&s"},
-    {"name": "Tamales", "image": "https://media.cnn.com/api/v1/images/stellar/prod/230321110034-03-body-mexican-foods-tamales.jpg?q=w_1110,c_fill"},
-]
+
 
 # Grid layout for recipes
 for i in range(0, len(recipes), 2):
