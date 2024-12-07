@@ -1,17 +1,32 @@
 import streamlit as st
 
-st.title("Visualize your current recipes")
+# Page configuration
+st.set_page_config(page_title="Recipes", page_icon="🍔", layout="wide")
 
+# Header
+st.title("🍔 Visualize Your Current Recipes")
+st.subheader("Explore the delicious recipes you have added")
+
+# Sample recipes data
 recipes = [
-    {"name": "Enchiladas", "image": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmasdemx.com%2Fwp-content%2Fuploads%2F2016%2F04%2FVM0402H_chicken-enchiladas_s4x3.jpg&f=1&nofb=1&ipt=8489ab4326812aa082c4ec06c13e5516858dcbffef936a0587dea7d70c4cc89f&ipo=images"},
-    {"name": "Tacos", "image": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmasdemx.com%2Fwp-content%2Fuploads%2F2016%2F04%2FVM0402H_chicken-enchiladas_s4x3.jpg&f=1&nofb=1&ipt=8489ab4326812aa082c4ec06c13e5516858dcbffef936a0587dea7d70c4cc89f&ipo=images"},
-    {"name": "Sopes", "image": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmasdemx.com%2Fwp-content%2Fuploads%2F2016%2F04%2FVM0402H_chicken-enchiladas_s4x3.jpg&f=1&nofb=1&ipt=8489ab4326812aa082c4ec06c13e5516858dcbffef936a0587dea7d70c4cc89f&ipo=images"},
-    {"name": "Empanadas", "image": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmasdemx.com%2Fwp-content%2Fuploads%2F2016%2F04%2FVM0402H_chicken-enchiladas_s4x3.jpg&f=1&nofb=1&ipt=8489ab4326812aa082c4ec06c13e5516858dcbffef936a0587dea7d70c4cc89f&ipo=images"}
+    {"name": "Chile en Nogada", "image": "https://www.tastingtable.com/img/gallery/traditional-mexican-dishes/l-intro-1683731770.jpg"},
+    {"name": "Enfrijoladas", "image": "https://blog.amigofoods.com/wp-content/uploads/2020/12/enfrijoladas-mexican-food.jpg"},
+    {"name": "Pozole", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnlTy5mUhFTAeDonihkTM2plqukb-1iLekwQ&s"},
+    {"name": "Tamales", "image": "https://media.cnn.com/api/v1/images/stellar/prod/230321110034-03-body-mexican-foods-tamales.jpg?q=w_1110,c_fill"},
 ]
 
-for recipe in recipes:
-    col = st.columns([1, 2])
-    with col[0]:
-        st.image(recipe["image"], width=100)
-    with col[1]:
-        st.subheader(recipe["name"])
+# Grid layout for recipes
+for i in range(0, len(recipes), 2):
+    cols = st.columns(2)
+    for col, recipe in zip(cols, recipes[i:i+2]):
+        with col:
+            st.markdown(f"""
+                <div style="border: 1px solid #ddd; padding: 10px; border-radius: 10px;">
+                    <img src="{recipe['image']}" alt="{recipe['name']}" style="width:100%; border-radius: 10px;">
+                    <h3 style="text-align: center;">{recipe['name']}</h3>
+                </div>
+            """, unsafe_allow_html=True)
+
+# Footer
+st.markdown("---")
+st.markdown("Made with ❤️ using Streamlit")
