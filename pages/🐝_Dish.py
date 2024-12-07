@@ -53,7 +53,19 @@ st.progress(progress)
 
 # Submit button
 if st.button("Send recipe"):
-    if recipe_name and ingredients and instructions:
+    if recipe_name and ingredients and instructions and cook_time and difficulty:
+        image_data = image.read() if image else None
+
+        recipe = {
+            "name": recipe_name, 
+            "ingredients": ingredients, 
+            "instructions": instructions, 
+            "cook_time": cook_time, 
+            "difficulty": difficulty, 
+            "image": image_data
+        }
+
+        collection.insert_one(recipe) 
         st.success("Recipe was sent correctly")
     else: 
         st.error('Please fill the missing fields')
